@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express();
+app.use(express.json());
 const port = 3000;
 let tasks = [
 {
@@ -27,16 +28,33 @@ let tasks = [
 app.get('/tasks',(req,res) => {
     res.status(200).json(tasks);
 });
-app.get('/tasks/:id',(req,res) => {
-       const  id = parseInt(req.params.id);
-    //    console.log(id)
-       const task = tasks.find((task) => task.id == id);
-    if(!task) {
-        return res.status(404).json({
-            error:`task${id} not found`
+// app.get('/tasks/:id',(req,res) => {
+//        const  id = parseInt(req.params.id);
+//     //    console.log(id)
+//        const task = tasks.find((task) => task.id == id);
+//     if(!task) {
+//         return res.status(404).json({
+//             error:`task${id} not found`
+//         })
+//     }
+//     res.status(200).json(task);
+// })
+app.post('/tasks',(req,res) =>{
+    const {title} = req.body
+    if (!title){
+        return res.status(400).json({
+            error:"title is required"
         })
     }
-    res.status(200).json(task);
+    const newtask = {
+        id: tasks.length +1,
+        title: title,
+        done: false
+
+    }
+    tasks.push(newtask);
+    res.status(201).json(newtask)
+
 })
 app.listen(port,()=> {
     console.log(`server running on port ${port}`)
