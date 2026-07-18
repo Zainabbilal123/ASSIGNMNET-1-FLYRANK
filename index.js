@@ -3,8 +3,17 @@ const app = express();
 const port = 3000;
 
 app.get('/',(req,res) => {
-    res.send("hello server")
+    res.json({
+        name : "task API",
+        version: "1.0",
+        endpoint: ["/tasks"]
+    })
 });
+app.get('/health',(req,res) => {
+       res.json({
+        status:"ok"
+       })
+})
 app.listen(port,()=> {
     console.log(`server running on port ${port}`)
 })
